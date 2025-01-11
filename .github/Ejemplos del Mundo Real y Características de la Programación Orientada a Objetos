@@ -1,0 +1,79 @@
+# Definimos la clase Producto
+class Producto:
+    def __init__(self, nombre, precio, stock):
+        self.nombre = nombre  # Atributo: nombre del producto
+        self.precio = precio  # Atributo: precio del producto
+        self.stock = stock    # Atributo: cantidad en stock
+
+    def __str__(self):
+        # Representación en forma de string del producto
+        return f"{self.nombre} - ${self.precio} - Stock: {self.stock}"
+
+# Definimos la clase CarritoDeCompras
+class CarritoDeCompras:
+    def __init__(self):
+        self.productos = []  # Atributo: lista de productos en el carrito
+
+    def agregar_producto(self, producto, cantidad):
+        if producto.stock >= cantidad:
+            self.productos.append({'producto': producto, 'cantidad': cantidad})
+            producto.stock -= cantidad
+            print(f"Agregado {cantidad} x {producto.nombre} al carrito.")
+        else:
+            print(f"No hay suficiente stock para {producto.nombre}. Solo hay {producto.stock} disponibles.")
+
+    def calcular_total(self):
+        total = sum(item['producto'].precio * item['cantidad'] for item in self.productos)
+        return total
+
+# Definimos la clase Cliente
+class Cliente:
+    def __init__(self, nombre):
+        self.nombre = nombre  # Atributo: nombre del cliente
+        self.carrito = CarritoDeCompras()  # El cliente tiene un carrito de compras
+
+    def agregar_producto_al_carrito(self, producto, cantidad):
+        self.carrito.agregar_producto(producto, cantidad)
+
+    def ver_total(self):
+        total = self.carrito.calcular_total()
+        print(f"Total de la compra de {self.nombre}: ${total}")
+        return total
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    # Creación de productos
+    producto1 = Producto("Camiseta", 20, 50)
+    producto2 = Producto("Pantalón", 40, 30)
+    producto3 = Producto("Zapatos", 60, 20)
+
+    # Creación de un cliente
+    cliente1 = Cliente("Juan Pérez")
+
+    # El cliente agrega productos al carrito
+    cliente1.agregar_producto_al_carrito(producto1, 2)  # 2 Camisetas
+    cliente1.agregar_producto_al_carrito(producto2, 1)  # 1 Pantalón
+    cliente1.agregar_producto_al_carrito(producto3, 5)  # 5 Zapatos
+
+    # El cliente ve el total de su compra
+    cliente1.ver_total()
+
+    # Ver el stock restante de los productos
+    print(f"Stock restante de Camisetas: {producto1.stock}")
+    print(f"Stock restante de Pantalones: {producto2.stock}")
+    print(f"Stock restante de Zapatos: {producto3.stock}")
+Agregado 2 x Camiseta al carrito.
+Agregado 1 x Pantalón al carrito.
+Agregado 5 x Zapatos al carrito.
+Total de la compra de Juan Pérez: $350
+Stock restante de Camisetas: 48
+Stock restante de Pantalones: 29
+Stock restante de Zapatos: 15
+git clone https://github.com/tu-usuario/tu-repositorio.git
+cd tu-repositorio
+mkdir EjemplosMundoReal_POO
+cd EjemplosMundoReal_POO
+# Crea el archivo tiend.py y pega el código anterior
+git add .
+git commit -m "Añadido ejemplo de POO para un sistema de tienda"
+git push origin main
