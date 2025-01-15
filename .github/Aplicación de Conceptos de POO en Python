@@ -1,0 +1,78 @@
+# Clase base: Animal
+class Animal:
+    # Atributos de instancia con encapsulación
+    def __init__(self, nombre, edad):
+        self.__nombre = nombre  # Atributo privado
+        self.__edad = edad      # Atributo privado
+
+    # Método para acceder al nombre (getter)
+    def get_nombre(self):
+        return self.__nombre
+
+    # Método para modificar el nombre (setter)
+    def set_nombre(self, nombre):
+        self.__nombre = nombre
+
+    # Método para acceder a la edad (getter)
+    def get_edad(self):
+        return self.__edad
+
+    # Método para modificar la edad (setter)
+    def set_edad(self, edad):
+        if edad >= 0:
+            self.__edad = edad
+        else:
+            print("La edad no puede ser negativa")
+
+    # Método polimórfico que puede ser sobrescrito en la clase derivada
+    def hacer_sonido(self):
+        print(f"El animal hace un sonido.")
+
+# Clase derivada: Perro
+class Perro(Animal):
+    # Atributos adicionales en la clase derivada
+    def __init__(self, nombre, edad, raza):
+        # Llamada al constructor de la clase base
+        super().__init__(nombre, edad)
+        self.__raza = raza
+
+    # Método sobrescrito (polimorfismo)
+    def hacer_sonido(self):
+        print(f"{self.get_nombre()} dice: ¡Guau!")
+
+    # Método para acceder a la raza (getter)
+    def get_raza(self):
+        return self.__raza
+
+    # Método para modificar la raza (setter)
+    def set_raza(self, raza):
+        self.__raza = raza
+
+# Crear instancias de las clases
+animal = Animal("Animal Genérico", 5)
+perro = Perro("Rex", 3, "Labrador")
+
+# Demostración de encapsulación: acceder a atributos privados mediante getters
+print(f"Nombre del animal: {animal.get_nombre()}")
+print(f"Edad del animal: {animal.get_edad()}")
+
+# Modificar atributos usando setters
+animal.set_nombre("Animal Modificado")
+animal.set_edad(6)
+
+print(f"Nuevo nombre del animal: {animal.get_nombre()}")
+print(f"Nueva edad del animal: {animal.get_edad()}")
+
+# Mostrar polimorfismo: el perro tiene un sonido diferente
+animal.hacer_sonido()  # Sonido genérico del animal
+perro.hacer_sonido()   # Sonido específico del perro
+
+# Demostración de acceso a atributos adicionales de la clase derivada
+print(f"La raza del perro es: {perro.get_raza()}")
+Nombre del animal: Animal Genérico
+Edad del animal: 5
+Nuevo nombre del animal: Animal Modificado
+Nueva edad del animal: 6
+El animal hace un sonido.
+Rex dice: ¡Guau!
+La raza del perro es: Labrador
