@@ -1,0 +1,51 @@
+git add .
+git commit -m "Descripción de los cambios"
+git push origin main
+# Dashboard.py - Modificado para mejorar la gestión de proyectos y tareas
+
+import tkinter as tk
+from tkinter import messagebox
+
+class Proyecto:
+    def __init__(self, nombre, fecha_vencimiento, prioridad):
+        self.nombre = nombre
+        self.fecha_vencimiento = fecha_vencimiento
+        self.prioridad = prioridad
+
+    def __str__(self):
+        return f"{self.nombre} (Vencimiento: {self.fecha_vencimiento}, Prioridad: {self.prioridad})"
+
+class Dashboard:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Gestión de Proyectos")
+        
+        self.proyectos = []
+        
+        # Etiquetas y botones
+        self.label = tk.Label(root, text="Proyecto de Programación Orientada a Objetos")
+        self.label.pack()
+
+        self.boton_agregar = tk.Button(root, text="Agregar Proyecto", command=self.agregar_proyecto)
+        self.boton_agregar.pack()
+
+        self.lista_proyectos = tk.Listbox(root)
+        self.lista_proyectos.pack()
+
+    def agregar_proyecto(self):
+        # Se puede modificar para obtener datos de un formulario o de entradas
+        nombre = "Nuevo Proyecto"
+        fecha_vencimiento = "2025-01-30"
+        prioridad = "Alta"
+
+        proyecto = Proyecto(nombre, fecha_vencimiento, prioridad)
+        self.proyectos.append(proyecto)
+        self.lista_proyectos.insert(tk.END, str(proyecto))
+
+    def mostrar_mensaje(self, mensaje):
+        messagebox.showinfo("Información", mensaje)
+
+# Iniciar la aplicación
+root = tk.Tk()
+dashboard = Dashboard(root)
+root.mainloop()
