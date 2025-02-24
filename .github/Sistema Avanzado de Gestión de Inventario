@@ -1,0 +1,164 @@
+import json
+
+# Clase Producto
+class Producto:
+    def __init__(self, id_producto, nombre, cantidad, precio):
+        self.id_producto = id_producto
+        self.nombre = nombre
+        self.cantidad = cantidad
+        self.precio = precio
+    
+    def obtener_id(self):
+        return self.id_producto
+    
+    def obtener_nombre(self):
+        return self.nombre
+    
+    def obtener_cantidad(self):
+        return self.cantidad
+    
+    def obtener_precio(self):
+        return self.precio
+    
+    def establecer_cantidad(self, cantidad):
+        self.cantidad = cantidad
+    
+    def establecer_precio(self, precio):
+        self.precio = precio
+
+    def __str__(self):
+        return f"ID: {self.id_producto} - Nombre: {self.nombre} - Cantidad: {self.cantidad} - Precio: ${self.precio:.2f}"
+
+# Clase Inventario
+class Inventario:
+    def __init__(self):
+        self.productos = {}
+    
+    def añadir_producto(self, producto):
+        """Añadir un nuevo producto al inventario."""
+        if producto.obtener_id() in self.productos:
+            print("El producto ya existe en el inventario.")
+        else:
+            self.productos[producto.obtener_id()] = producto
+            print(f"Producto {producto.obtener_nombre()} añadido al inventario.")
+    
+    def eliminar_producto(self, id_producto):
+        """Eliminar un producto por ID."""
+        if id_producto in self.productos:
+            del self.productos[id_producto]
+            print(f"Producto con ID {id_producto} eliminado.")
+        else:
+            print("Producto no encontrado.")
+    
+    def actualizar_producto(self, id_producto, cantidad=None, precio=None):
+        """Actualizar cantidad o precio de un producto."""
+        if id_producto in self.productos:
+            producto = self.productos[id_producto]
+            if cantidad is not None:
+                producto.establecer_cantidad(cantidad)
+            if precio is not None:
+                producto.establecer_precio(precio)
+            print(f"Producto con ID {id_producto} actualizado.")
+        else:
+            print("Producto no encontrado.")
+    
+    def buscar_producto_por_nombre(self, nombre):
+        """Buscar y mostrar productos por nombre."""
+        encontrados = [producto for producto in self.productos.values() if nombre.lower() in producto.obtener_nombre().lower()]
+        if encontrados:
+            for producto in encontrados:
+                print(producto)
+        else:
+            print("No se encontraron productos con ese nombre.")
+    
+    def mostrar_inventario(self):
+        """Mostrar todos los productos en el inventario."""
+        if self.productos:
+            for producto in self.productos.values():
+                print(producto)
+        else:
+            print("El inventario está vacío.")
+
+    def guardar_inventario(self, archivo):
+        """Guardar el inventario en un archivo JSON."""
+        with open(archivo, 'w') as f:
+            json.dump({id_producto: producto.__dict__ for id_producto, producto in self.productos.items()}, f)
+        print("Inventario guardado en el archivo.")
+    
+    def cargar_inventario(self, archivo):
+        """Cargar el inventario desde un archivo JSON."""
+        try:
+            with open(archivo, 'r') as f:
+                productos_data = json.load(f)
+                self.productos = {}
+                for id_producto, producto_data in productos_data.items():
+                    producto = Producto(producto_data['id_producto'], producto_data['nombre'],
+                                        producto_data['cantidad'], producto_data['precio'])
+                    self.productos[id_producto] = producto
+            print("Inventario cargado desde el archivo.")
+        except FileNotFoundError:
+            print("El archivo no existe, creando un nuevo inventario.")
+        
+
+# Función para mostrar el menú
+def mostrar_menu():
+    print("\n---- Menú de Gestión de Inventario ----")
+    print("1. Añadir Producto")
+    print("2. Eliminar Producto")
+    print("3. Actualizar Producto")
+    print("4. Buscar Producto por Nombre")
+    print("5. Mostrar Inventario")
+    print("6. Guardar Inventario")
+    print("7. Cargar Inventario")
+    print("8. Salir")
+
+def main():
+    inventario = Inventario()
+    archivo = "inventario.json"  # El archivo donde se guardará el inventario
+    
+    while True:
+        mostrar_menu()
+        opcion = input("Selecciona una opción: ")
+        
+        if opcion == '1':
+            id_producto = input("ID del producto: ")
+            nombre = input("Nombre del producto: ")
+            cantidad = int(input("Cantidad: "))
+            precio = float(input("Precio: "))
+            producto = Producto(id_producto, nombre, cantidad, precio)
+            inventario.añadir_producto(producto)
+        
+        elif opcion == '2':
+            id_producto = input("ID del producto a eliminar: ")
+            inventario.eliminar_producto(id_producto)
+        
+        elif opcion == '3':
+            id_producto = input("ID del producto a actualizar: ")
+            cantidad = input("Nueva cantidad (deja vacío para no cambiar): ")
+            precio = input("Nuevo precio (deja vacío para no cambiar): ")
+            cantidad = int(cantidad) if cantidad else None
+            precio = float(precio) if precio else None
+            inventario.actualizar_producto(id_producto, cantidad, precio)
+        
+        elif opcion == '4':
+            nombre = input("Nombre del producto a buscar: ")
+            inventario.buscar_producto_por_nombre(nombre)
+        
+        elif opcion == '5':
+            inventario.mostrar_inventario()
+        
+        elif opcion == '6':
+            inventario.guardar_inventario(archivo)
+        
+        elif opcion == '7':
+            inventario.cargar_inventario(archivo)
+        
+        elif opcion == '8':
+            print("Saliendo...")
+            break
+        
+        else:
+            print("Opción no válida, por favor elige una opción válida.")
+
+if __name__ == "__main__":
+    main()
