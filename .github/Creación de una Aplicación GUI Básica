@@ -1,0 +1,45 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Función para agregar el texto al listbox
+def agregar_dato():
+    dato = campo_texto.get()
+    if dato:  # Si el campo no está vacío
+        lista_datos.insert(tk.END, dato)
+        campo_texto.delete(0, tk.END)  # Limpiar el campo de texto
+    else:
+        messagebox.showwarning("Entrada vacía", "Por favor, ingrese un dato antes de agregar.")
+
+# Función para limpiar el listbox
+def limpiar():
+    lista_datos.delete(0, tk.END)  # Eliminar todos los elementos de la lista
+
+# Crear la ventana principal
+ventana = tk.Tk()
+ventana.title("Aplicación de Datos")
+
+# Configuración de la ventana
+ventana.geometry("400x300")  # Establecer tamaño de la ventana
+
+# Etiqueta de título
+titulo = tk.Label(ventana, text="Ingrese un dato:", font=("Arial", 14))
+titulo.pack(pady=10)
+
+# Campo de texto para ingresar datos
+campo_texto = tk.Entry(ventana, font=("Arial", 12))
+campo_texto.pack(pady=10)
+
+# Botón para agregar dato a la lista
+boton_agregar = tk.Button(ventana, text="Agregar", font=("Arial", 12), command=agregar_dato)
+boton_agregar.pack(pady=5)
+
+# Lista para mostrar los datos agregados
+lista_datos = tk.Listbox(ventana, font=("Arial", 12), width=40, height=8)
+lista_datos.pack(pady=10)
+
+# Botón para limpiar la lista
+boton_limpiar = tk.Button(ventana, text="Limpiar", font=("Arial", 12), command=limpiar)
+boton_limpiar.pack(pady=5)
+
+# Ejecutar la aplicación
+ventana.mainloop()
