@@ -1,0 +1,72 @@
+class Paciente:
+    def __init__(self, cedula, nombre, especialidad, fecha, hora):
+        self.cedula = cedula
+        self.nombre = nombre
+        self.especialidad = especialidad
+        self.fecha = fecha
+        self.hora = hora
+
+    def mostrar_info(self):
+        return f"Cédula: {self.cedula}, Nombre: {self.nombre}, Especialidad: {self.especialidad}, Fecha: {self.fecha}, Hora: {self.hora}"
+
+
+class AgendaTurnos:
+    def __init__(self):
+        self.turnos = []
+
+    def agregar_turno(self, paciente):
+        self.turnos.append(paciente)
+
+    def mostrar_turnos(self):
+        if not self.turnos:
+            print("No hay turnos registrados.")
+        else:
+            for paciente in self.turnos:
+                print(paciente.mostrar_info())
+
+    def buscar_por_cedula(self, cedula):
+        encontrados = [p for p in self.turnos if p.cedula == cedula]
+        if encontrados:
+            for p in encontrados:
+                print(p.mostrar_info())
+        else:
+            print("No se encontraron turnos para esa cédula.")
+
+
+def menu():
+    agenda = AgendaTurnos()
+
+    while True:
+        print("\n--- AGENDA DE TURNOS CLÍNICA ---")
+        print("1. Registrar nuevo turno")
+        print("2. Mostrar todos los turnos")
+        print("3. Buscar turno por cédula")
+        print("4. Salir")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == '1':
+            cedula = input("Ingrese la cédula del paciente: ")
+            nombre = input("Ingrese el nombre del paciente: ")
+            especialidad = input("Ingrese la especialidad: ")
+            fecha = input("Ingrese la fecha del turno (dd/mm/aaaa): ")
+            hora = input("Ingrese la hora del turno (hh:mm): ")
+            paciente = Paciente(cedula, nombre, especialidad, fecha, hora)
+            agenda.agregar_turno(paciente)
+            print("✅ Turno registrado exitosamente.")
+
+        elif opcion == '2':
+            agenda.mostrar_turnos()
+
+        elif opcion == '3':
+            cedula = input("Ingrese la cédula a buscar: ")
+            agenda.buscar_por_cedula(cedula)
+
+        elif opcion == '4':
+            print("Gracias por usar el sistema.")
+            break
+
+        else:
+            print("Opción inválida. Intente nuevamente.")
+
+if __name__ == "__main__":
+    menu()
