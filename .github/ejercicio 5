@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        List<int> numeros = new List<int>();
+
+        // Llenar la lista con los números del 1 al 10
+        for (int i = 1; i <= 10; i++)
+        {
+            numeros.Add(i);
+        }
+
+        // Invertir el orden
+        numeros.Reverse();
+
+        // Mostrar separados por comas
+        Console.WriteLine(string.Join(", ", numeros));
+    }
+}
+10, 9, 8, 7, 6, 5, 4, 3, 2, 1
