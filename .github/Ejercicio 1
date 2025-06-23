@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+
+class Curso
+{
+    public List<string> Asignaturas { get; set; }
+
+    public Curso()
+    {
+        Asignaturas = new List<string> { "Matemáticas", "Física", "Química", "Historia", "Lengua" };
+    }
+
+    public void MostrarAsignaturas()
+    {
+        Console.WriteLine("Asignaturas del curso:");
+        foreach (var asignatura in Asignaturas)
+            Console.WriteLine($"- {asignatura}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Curso curso = new Curso();
+        curso.MostrarAsignaturas();
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Estudiante
+{
+    public List<double> Calificaciones { get; set; }
+
+    public Estudiante(List<double> calificaciones)
+    {
+        Calificaciones = calificaciones;
+    }
+
+    public double CalcularPromedio()
+    {
+        return Calificaciones.Average();
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        var estudiante = new Estudiante(new List<double> { 8.5, 7.0, 9.2, 6.8 });
+        Console.WriteLine($"Promedio: {estudiante.CalcularPromedio():0.00}");
+    }
+}
+using System;
+
+class AnalizadorTexto
+{
+    public static int ContarPalabras(string frase)
+    {
+        return frase.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        string frase = "C# es un lenguaje potente y versátil";
+        Console.WriteLine($"Palabras: {AnalizadorTexto.ContarPalabras(frase)}");
+    }
+}
+using System;
+
+class Producto
+{
+    public string Nombre { get; set; }
+    public decimal Precio { get; set; }
+
+    public Producto(string nombre, decimal precio)
+    {
+        Nombre = nombre;
+        Precio = precio;
+    }
+
+    public void MostrarInfo()
+    {
+        Console.WriteLine($"Producto: {Nombre}, Precio: ${Precio}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Producto producto = new Producto("Laptop", 799.99m);
+        producto.MostrarInfo();
+    }
+}
+using System;
+
+class Matematica
+{
+    public static bool EsPrimo(int numero)
+    {
+        if (numero <= 1) return false;
+        for (int i = 2; i <= Math.Sqrt(numero); i++)
+        {
+            if (numero % i == 0) return false;
+        }
+        return true;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        int numero = 17;
+        Console.WriteLine($"{numero} es primo: {Matematica.EsPrimo(numero)}");
+    }
+}
