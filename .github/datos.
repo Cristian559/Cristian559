@@ -1,0 +1,30 @@
+# Programa para trabajar con datos reales
+
+# Paso 1: Solicitar la cantidad de datos
+n = int(input("Ingrese la cantidad de datos reales que desea cargar: "))
+
+# Paso 2: Crear la lista principal y cargar los datos
+lista_principal = []
+for i in range(n):
+    dato = float(input(f"Ingrese el dato número {i+1}: "))
+    lista_principal.append(dato)
+
+# Paso 3: Calcular el promedio
+promedio = sum(lista_principal) / len(lista_principal)
+
+# Paso 4: Clasificar los datos en dos nuevas listas
+menores_igual = []
+mayores = []
+
+for dato in lista_principal:
+    if dato <= promedio:
+        menores_igual.append(dato)
+    else:
+        mayores.append(dato)
+
+# Paso 5: Mostrar resultados
+print("\n--- RESULTADOS ---")
+print("a. Lista principal de datos:", lista_principal)
+print("b. Promedio de los datos:", promedio)
+print("c. Datos menores o iguales al promedio:", menores_igual)
+print("d. Datos mayores al promedio:", mayores)
