@@ -1,0 +1,84 @@
+// Persona.cs
+public class Persona
+{
+    public string Nombre { get; set; }
+    public int NumeroAsiento { get; set; }
+
+    public Persona(string nombre)
+    {
+        Nombre = nombre;
+    }
+
+    public override string ToString()
+    {
+        return $"Nombre: {Nombre}, Asiento: {NumeroAsiento}";
+    }
+}
+// ColaDeAsientos.cs
+using System.Collections.Generic;
+
+public class ColaDeAsientos
+{
+    private Queue<Persona> cola;
+    private int asientosDisponibles = 30;
+    private int contadorAsientos = 1;
+
+    public ColaDeAsientos()
+    {
+        cola = new Queue<Persona>();
+    }
+
+    public bool RegistrarPersona(Persona persona)
+    {
+        if (contadorAsientos > asientosDisponibles)
+            return false;
+
+        persona.NumeroAsiento = contadorAsientos++;
+        cola.Enqueue(persona);
+        return true;
+    }
+
+    public List<Persona> ConsultarCola()
+    {
+        return new List<Persona>(cola);
+    }
+
+    public void MostrarCola()
+    {
+        foreach (var p in cola)
+        {
+            Console.WriteLine(p);
+        }
+    }
+}
+// Programa.cs
+using System;
+
+class Programa
+{
+    static void Main()
+    {
+        ColaDeAsientos cola = new ColaDeAsientos();
+        Console.WriteLine("Registro de visitantes para la atracción. Máximo 30 personas.");
+
+        while (true)
+        {
+            Console.Write("Ingrese el nombre del visitante (o 'salir'): ");
+            string entrada = Console.ReadLine();
+            if (entrada.ToLower() == "salir") break;
+
+            Persona persona = new Persona(entrada);
+            bool registrado = cola.RegistrarPersona(persona);
+
+            if (registrado)
+                Console.WriteLine("Registro exitoso.");
+            else
+                Console.WriteLine("Todos los asientos están ocupados.");
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("\nLista final de personas registradas:");
+        cola.MostrarCola();
+    }
+}
