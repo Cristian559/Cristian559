@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+
+namespace VacunacionCOVID
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // 1. Conjunto de ciudadanos
+            HashSet<string> ciudadanos = new HashSet<string>();
+            for (int i = 1; i <= 500; i++)
+            {
+                ciudadanos.Add("Ciudadano" + i);
+            }
+
+            // 2. Generar ciudadanos vacunados con Pfizer y AstraZeneca
+            Random rnd = new Random();
+            HashSet<string> pfizer = new HashSet<string>(ciudadanos.OrderBy(x => rnd.Next()).Take(75));
+            HashSet<string> astrazeneca = new HashSet<string>(ciudadanos.OrderBy(x => rnd.Next()).Take(75));
+
+            // 3. Operaciones de teoría de conjuntos
+            // Ciudadanos no vacunados
+            HashSet<string> noVacunados = new HashSet<string>(ciudadanos);
+            noVacunados.ExceptWith(pfizer.Union(astrazeneca));
+
+            // Ciudadanos con ambas dosis
+            HashSet<string> ambasDosis = new HashSet<string>(pfizer);
+            ambasDosis.IntersectWith(astrazeneca);
+
+            // Solo Pfizer
+            HashSet<string> soloPfizer = new HashSet<string>(pfizer);
+            soloPfizer.ExceptWith(astrazeneca);
+
+            // Solo AstraZeneca
+            HashSet<string> soloAstraZeneca = new HashSet<string>(astrazeneca);
+            soloAstraZeneca.ExceptWith(pfizer);
+
+            // 4. Mostrar resultados en consola
+            Console.WriteLine("===== RESULTADOS VACUNACIÓN =====");
+            Console.WriteLine("No vacunados: " + noVacunados.Count);
+            Console.WriteLine("Ambas dosis: " + ambasDosis.Count);
+            Console.WriteLine("Solo Pfizer: " + soloPfizer.Count);
+            Console.WriteLine("Solo AstraZeneca: " + soloAstraZeneca.Count);
+
+            // 5. Guardar resultados en archivos de texto
+            File.WriteAllLines("NoVacunados.txt", noVacunados);
+            File.WriteAllLines("AmbasDosis.txt", ambasDosis);
+            File.WriteAllLines("SoloPfizer.txt", soloPfizer);
+            File.WriteAllLines("SoloAstraZeneca.txt", soloAstraZeneca);
+
+            Console.WriteLine("\nSe han generado los listados en archivos de texto.");
+        }
+    }
+}
