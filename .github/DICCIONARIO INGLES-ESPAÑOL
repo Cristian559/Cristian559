@@ -1,0 +1,158 @@
+using System;
+using System.Collections.Generic;
+
+namespace TraductorBidireccional
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Diccionario base Inglés → Español
+            Dictionary<string, string> inglesEspanol = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "time", "tiempo" },
+                { "person", "persona" },
+                { "year", "año" },
+                { "way", "camino" },
+                { "day", "día" },
+                { "thing", "cosa" },
+                { "man", "hombre" },
+                { "world", "mundo" },
+                { "life", "vida" },
+                { "hand", "mano" },
+                { "part", "parte" },
+                { "child", "niño" },
+                { "eye", "ojo" },
+                { "woman", "mujer" },
+                { "place", "lugar" },
+                { "work", "trabajo" },
+                { "week", "semana" },
+                { "case", "caso" },
+                { "point", "punto" },
+                { "government", "gobierno" },
+                { "company", "compañía" }
+            };
+
+            // Diccionario Español → Inglés (generado a partir del anterior)
+            Dictionary<string, string> espanolIngles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var par in inglesEspanol)
+            {
+                if (!espanolIngles.ContainsKey(par.Value))
+                {
+                    espanolIngles.Add(par.Value, par.Key);
+                }
+            }
+
+            int opcion = -1;
+
+            while (opcion != 0)
+            {
+                Console.WriteLine("\n==================== MENÚ ====================");
+                Console.WriteLine("1. Traducir una frase (Inglés → Español)");
+                Console.WriteLine("2. Traducir una frase (Español → Inglés)");
+                Console.WriteLine("3. Agregar palabras al diccionario");
+                Console.WriteLine("0. Salir");
+                Console.Write("Seleccione una opción: ");
+
+                if (!int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    Console.WriteLine("⚠ Opción inválida. Intente de nuevo.");
+                    continue;
+                }
+
+                switch (opcion)
+                {
+                    case 1:
+                        TraducirFrase(inglesEspanol, "Inglés → Español");
+                        break;
+
+                    case 2:
+                        TraducirFrase(espanolIngles, "Español → Inglés");
+                        break;
+
+                    case 3:
+                        AgregarPalabra(inglesEspanol, espanolIngles);
+                        break;
+
+                    case 0:
+                        Console.WriteLine("👋 Saliendo del programa. ¡Hasta pronto!");
+                        break;
+
+                    default:
+                        Console.WriteLine("⚠ Opción no válida.");
+                        break;
+                }
+            }
+        }
+
+        static void TraducirFrase(Dictionary<string, string> diccionario, string modo)
+        {
+            Console.WriteLine($"\nIngrese una frase para traducir ({modo}):");
+            string frase = Console.ReadLine();
+
+            // Dividir en palabras conservando puntuación
+            string[] palabras = frase.Split(' ', ',', '.', ';', '!', '?');
+            string[] separadores = frase.Split(palabras, StringSplitOptions.None);
+
+            List<string> resultado = new List<string>();
+
+            for (int i = 0; i < palabras.Length; i++)
+            {
+                string palabra = palabras[i];
+                string palabraMinus = palabra.ToLower();
+
+                if (diccionario.ContainsKey(palabraMinus))
+                {
+                    string traduccion = diccionario[palabraMinus];
+
+                    // Mantener mayúscula inicial si la original la tenía
+                    if (!string.IsNullOrEmpty(palabra) && Char.IsUpper(palabra[0]))
+                    {
+                        traduccion = Char.ToUpper(traduccion[0]) + traduccion.Substring(1);
+                    }
+
+                    resultado.Add(traduccion);
+                }
+                else
+                {
+                    resultado.Add(palabra);
+                }
+
+                if (i < separadores.Length)
+                {
+                    resultado.Add(separadores[i]);
+                }
+            }
+
+            Console.WriteLine("\n--- Traducción ---");
+            Console.WriteLine(string.Join("", resultado));
+        }
+
+        static void AgregarPalabra(Dictionary<string, string> dicInglesEspanol, Dictionary<string, string> dicEspanolIngles)
+        {
+            Console.Write("\nIngrese la palabra en inglés: ");
+            string ingles = Console.ReadLine().Trim().ToLower();
+
+            Console.Write("Ingrese la traducción al español: ");
+            string espanol = Console.ReadLine().Trim().ToLower();
+
+            if (!dicInglesEspanol.ContainsKey(ingles))
+            {
+                dicInglesEspanol.Add(ingles, espanol);
+
+                if (!dicEspanolIngles.ContainsKey(espanol))
+                {
+                    dicEspanolIngles.Add(espanol, ingles);
+                }
+
+                Console.WriteLine($"✅ Palabra agregada: {ingles} ↔ {espanol}");
+            }
+            else
+            {
+                Console.WriteLine("⚠ Esa palabra ya existe en el diccionario.");
+            }
+        }
+    }
+}
+El hombre dedica mucho tiempo a su trabajo en la compañía.
+El man dedica mucho time a su work en la company.
