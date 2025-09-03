@@ -1,0 +1,43 @@
+# Registro de equipos y jugadores en un torneo de fútbol
+
+# Diccionario: clave = equipo, valor = conjunto de jugadores
+torneo = {}
+
+def registrar_equipo(nombre_equipo):
+    if nombre_equipo not in torneo:
+        torneo[nombre_equipo] = set()
+        print(f"Equipo '{nombre_equipo}' registrado correctamente.")
+    else:
+        print("El equipo ya existe.")
+
+def registrar_jugador(nombre_equipo, jugador):
+    if nombre_equipo in torneo:
+        torneo[nombre_equipo].add(jugador)
+        print(f"Jugador '{jugador}' agregado al equipo '{nombre_equipo}'.")
+    else:
+        print("El equipo no está registrado.")
+
+def mostrar_equipos():
+    print("\nEquipos registrados en el torneo:")
+    for equipo in torneo.keys():
+        print("-", equipo)
+
+def mostrar_jugadores(nombre_equipo):
+    if nombre_equipo in torneo:
+        print(f"\nJugadores del equipo '{nombre_equipo}':")
+        for jugador in torneo[nombre_equipo]:
+            print("-", jugador)
+    else:
+        print("El equipo no está registrado.")
+
+# Ejemplo de uso
+registrar_equipo("Tigres")
+registrar_equipo("Leones")
+
+registrar_jugador("Tigres", "Carlos")
+registrar_jugador("Tigres", "Andrés")
+registrar_jugador("Leones", "Mateo")
+registrar_jugador("Leones", "Luis")
+
+mostrar_equipos()
+mostrar_jugadores("Tigres")
