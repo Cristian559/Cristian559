@@ -1,0 +1,38 @@
+# prod_cons.py
+import threading, time
+
+BUFFER = []
+BUFFER_SIZE = 5
+
+mutex = threading.Lock()
+items = threading.Semaphore(0)         # cuantos items hay disponibles
+spaces = threading.Semaphore(BUFFER_SIZE)  # cuántos espacios libres quedan
+
+def producer(id, n=8):
+    for i in range(n):
+        spaces.acquire()               # esperar espacio
+        with mutex:
+            BUFFER.append((id, i))
+            print(f"P{ id } produjo { i }")
+        items.release()                # indicar que hay un item
+        time.sleep(0.05)
+
+def consumer(id, total_items):
+    consumed = 0
+    while consumed < total_items:
+        items.acquire()                 # esperar item disponible
+        with mutex:
+            item = BUFFER.pop(0)
+        spaces.release()                # liberar espacio
+        print(f"C{ id } consumió { item }")
+        consumed += 1
+        time.sleep(0.1)
+
+# Lanzamiento
+prods = [threading.Thread(target=producer, args=(1,8))]
+cons = [threading.Thread(target=consumer, args=(1,8))]
+
+for p in prods: p.start()
+for c in cons: c.start()
+for p in prods: p.join()
+for c in cons: c.join()
