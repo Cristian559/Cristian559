@@ -1,0 +1,103 @@
+using System;
+using System.Collections.Generic;
+
+namespace CatalogoRevistas
+{
+    class Program
+    {
+        // Método principal
+        static void Main(string[] args)
+        {
+            // Catálogo de revistas (se podrían cargar desde archivo o BD en otro escenario)
+            List<string> catalogo = new List<string>
+            {
+                "National Geographic",
+                "Time",
+                "Scientific American",
+                "Forbes",
+                "Nature",
+                "Sports Illustrated",
+                "Vogue",
+                "Popular Science",
+                "Reader's Digest",
+                "The Economist"
+            };
+
+            int opcion;
+            do
+            {
+                // Menú interactivo
+                Console.Clear();
+                Console.WriteLine("=== Catálogo de Revistas ===");
+                Console.WriteLine("1. Buscar título");
+                Console.WriteLine("2. Mostrar catálogo completo");
+                Console.WriteLine("3. Salir");
+                Console.Write("Seleccione una opción: ");
+
+                // Validación de la opción ingresada
+                if (!int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    Console.WriteLine("⚠ Opción inválida. Intente nuevamente...");
+                    opcion = 0; // Valor por defecto para repetir el menú
+                }
+
+                switch (opcion)
+                {
+                    case 1:
+                        Console.Write("\nIngrese el título de la revista a buscar: ");
+                        string titulo = Console.ReadLine();
+
+                        // Llamada al método de búsqueda
+                        bool encontrado = BuscarIterativo(catalogo, titulo);
+
+                        if (encontrado)
+                            Console.WriteLine("\n✅ Revista encontrada en el catálogo.");
+                        else
+                            Console.WriteLine("\n❌ Revista no encontrada en el catálogo.");
+
+                        Console.WriteLine("\nPresione una tecla para continuar...");
+                        Console.ReadKey();
+                        break;
+
+                    case 2:
+                        Console.WriteLine("\n=== Lista de Revistas ===");
+                        foreach (var revista in catalogo)
+                        {
+                            Console.WriteLine($"- {revista}");
+                        }
+                        Console.WriteLine("\nPresione una tecla para continuar...");
+                        Console.ReadKey();
+                        break;
+
+                    case 3:
+                        Console.WriteLine("\nSaliendo del programa...");
+                        break;
+
+                    default:
+                        Console.WriteLine("\n⚠ Opción no válida. Intente nuevamente.");
+                        Console.ReadKey();
+                        break;
+                }
+
+            } while (opcion != 3);
+        }
+
+        /// <summary>
+        /// Búsqueda iterativa en una lista de cadenas.
+        /// </summary>
+        /// <param name="lista">Lista de títulos.</param>
+        /// <param name="titulo">Título a buscar.</param>
+        /// <returns>true si se encuentra, false en caso contrario.</returns>
+        static bool BuscarIterativo(List<string> lista, string titulo)
+        {
+            foreach (string item in lista)
+            {
+                if (item.Equals(titulo, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true; // Se encontró
+                }
+            }
+            return false; // No se encontró
+        }
+    }
+}
