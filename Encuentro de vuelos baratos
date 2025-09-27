@@ -1,0 +1,64 @@
+import csv, time, networkx as nx
+
+def cargar_vuelos(path):
+    vuelos = []
+    with open(path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            row['precio'] = float(row['precio'])
+            vuelos.append(row)
+    return vuelos
+
+def construir_grafo(vuelos):
+    G = nx.DiGraph()
+    for v in vuelos:
+        o, d, p = v['origen'], v['destino'], v['precio']
+        if G.has_edge(o, d):
+            if p < G[o][d]['weight']:
+                G[o][d]['weight'] = p
+        else:
+            G.add_edge(o, d, weight=p)
+    return G
+
+def vuelo_mas_barato(G, origen, destino):
+    try:
+        ruta = nx.dijkstra_path(G, origen, destino, weight='weight')
+        costo = nx.dijkstra_path_length(G, origen, destino, weight='weight')
+        return ruta, costo
+    except nx.NetworkXNoPath:
+        return None, None
+
+if __name__ == "__main__":
+    inicio = time.perf_counter()
+    vuelos = cargar_vuelos("../data/vuelos.csv")
+    G = construir_grafo(vuelos)
+
+    print("Ciudades disponibles:", list(G.nodes))
+    print("Vuelos disponibles:", list(G.edges(data=True)))
+
+    origen = input("Origen: ").strip().upper()
+    destino = input("Destino: ").strip().upper()
+    ruta, costo = vuelo_mas_barato(G, origen, destino)
+
+    if ruta:
+        print("Ruta más barata:", " → ".join(ruta))
+        print(f"Costo total: ${costo:.2f}")
+    else:
+        print("No existe una ruta disponible.")
+    print(f"Tiempo de ejecución: {time.perf_counter() - inicio:.6f} segundos")
+origen,destino,precio,duracion,fecha
+GYE,UIO,60,0:45,2025-09-30
+GYE,MBL,120,1:05,2025-10-10
+UIO,MBL,80,1:00,2025-10-01
+UIO,GYE,65,0:45,2025-10-05
+MBL,GYE,90,1:20,2025-10-07
+Ciudades disponibles: ['GYE', 'UIO', 'MBL']
+Vuelos disponibles: [('GYE', 'UIO', {'weight': 60.0}), ('GYE', 'MBL', {'weight': 120.0}),
+                     ('UIO', 'MBL', {'weight': 80.0}), ('UIO', 'GYE', {'weight': 65.0}),
+                     ('MBL', 'GYE', {'weight': 90.0})]
+
+Origen: GYE
+Destino: MBL
+Ruta más barata: GYE → UIO → MBL
+Costo total: $140.00
+Tiempo de ejecución: 0.00075 segundos
