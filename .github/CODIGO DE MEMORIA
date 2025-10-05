@@ -1,0 +1,16 @@
+import sys
+import gc
+
+# Crear una lista grande de números
+numeros = list(range(1000000))
+
+# Verificar el tamaño en memoria de la lista
+print("Tamaño de la lista en bytes:", sys.getsizeof(numeros))
+
+# Liberar la lista para liberar memoria
+del numeros
+
+# Forzar recolector de basura
+gc.collect()
+
+print("Memoria liberada tras eliminar la lista")
